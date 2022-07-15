@@ -28,14 +28,16 @@ module.exports = (sequelize, DataTypes) => {
     let SecurityGroup = sequelize.define(alias, cols, config);
 
     /* Creating a many to many relationship between the SecurityGroup and User tables. */
-    SecurityGroup.associate = (models) => {
+    SecurityGroup.associate = function (models){
         SecurityGroup.belongsToMany(models.User, {
-            as: "users",
+            as: "securitygroups",
             through: "user_security",
-            foreignKey: "id_user",
-            otherKey: "id_group"
-        })
-    };
+            foreignKey: "id_group",
+            otherKey: "id_user",
+            timestamps: false
+            });
+    }
+    
 
     return SecurityGroup;
 }

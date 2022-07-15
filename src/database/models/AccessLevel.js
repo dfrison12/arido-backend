@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /* Creating a relationship between the AccessLevel and User tables. */
     AccessLevel.associate = (models) => {
-        AccessLevel.hasMany(models.User, {
+        AccessLevel.belongsToMany(models.User, {
             as: "users",
             through: "user_security",
             foreignKey: "id_user",

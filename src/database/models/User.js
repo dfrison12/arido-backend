@@ -19,10 +19,13 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(12),
             allowNull: false
         },
-        create_time: {
+        createdAt: {
+            field: 'created_at',
             type: DataTypes.DATE,
-            allowNull: false
-
+          },
+        updatedAt: {
+            field: 'updated_at',
+            type: DataTypes.DATE,
         },
         actived: {
             type: DataTypes.BOOLEAN,
@@ -41,14 +44,16 @@ module.exports = (sequelize, DataTypes) => {
     let User = sequelize.define(alias, cols, config);
 
     /* Creating a relationship between the User and the SecurityGroup and AccessLevel models. */
-    User.associate = (models) => {
+    User.associate = function (models){
         User.belongsToMany(models.SecurityGroup, {
             as: "securitygroups",
             through: "user_security",
-            foreignKey: "id_group",
-            otherKey: "id_user",
-        })
-    };
+            foreignKey: "id_user",
+            otherKey: "id_group",
+            timestamps: false
+        });
+    }
+    
 
     User.associate = (models) => {
         User.belongsToMany(models.AccessLevel, {
