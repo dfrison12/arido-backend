@@ -1,4 +1,4 @@
-// importing external packages
+// Importing external packages
 const express = require('express');
 
 /* Importing routers */
@@ -10,16 +10,9 @@ const app = express();
 /* Telling the server to use the mainRouter when the user goes to the root directory. */
 app.use("/", mainRouter);
 
-
-// config global middlewares
+/* Configuring global middlewares */
 app.use(express.json());
-
-
-
-
-
-
-
+app.use(express.urlencoded({extended: false}));
 
 /* This is the port that the server is running on. */
 const port = 3001;
