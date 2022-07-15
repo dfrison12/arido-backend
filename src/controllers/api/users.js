@@ -1,32 +1,25 @@
-// -- DATOS PARA TRABAJAR
-const db = require ("../../database/models/index");
-const sequelize = db.sequelize
-const path = require('path');
 
-//Aqui tienen otra forma de llamar a cada uno de los modelos
+/* Importing the database models and the Op object. */
+const db = require ("../../database/models");
+const Op = db.sequelize.Op
+
+
+/* Creating a variable called User that is equal to the User model. */
 const User = db.User;
 
-//Metodos
+//Metods
 
-const mainController = {
+module.exports = {
+    /* Service to retrieve registered users. */
     list: (req,res) => {
-
-    db.User.findAll(
-        {include:
-            [
-                /*{association:"securitygroups"},
-                {association:"accesslevel"}*/
-            ]
-        })
-            .then(users =>{
-                
-                users.map(
-                    function(user){
-                        console.log(user.dataValues)
-                    }
-                )
+        User
+        .findAll()
+        .then((users) => {
+            return res.status(200).json({
+                registered_accounts: users.length,
+                data: users,
+                status: 200
+            })
         })
      }
 }
-
-module.exports = mainController
