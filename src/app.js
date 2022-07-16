@@ -2,13 +2,13 @@
 const express = require('express');
 
 /* Importing routers */
-const mainRouter = require('./routes/index');
+const userRouter = require('./routes/api/users');
 
 /* Creating an instance of the express package. */
 const app = express();
 
 /* Telling the server to use the mainRouter when the user goes to the root directory. */
-app.use("/", mainRouter);
+app.use("/", userRouter);
 
 /* Configuring global middlewares */
 app.use(express.json());
