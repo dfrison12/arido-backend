@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         group_description: {
             type: DataTypes.STRING(250),
+            allowNull: false
         }
     };
 
@@ -34,9 +35,20 @@ module.exports = (sequelize, DataTypes) => {
             through: "user_security",
             foreignKey: "id_group",
             otherKey: "id_user",
-            timestamps: false
+            timestamps: false,
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE"
             });
     }
+
+    SecurityGroup.associate = (models) => {
+        SecurityGroup.hasMany(models.UserSecurity, {
+            as: "group",
+            foreignKey: "id_group",
+            timestamp: false
+       });
+       }
+
     
 
     return SecurityGroup;

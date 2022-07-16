@@ -16,17 +16,14 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         pass: {
-            type: DataTypes.STRING(12),
+            type: DataTypes.STRING(250),
             allowNull: false
         },
         createdAt: {
             field: 'created_at',
             type: DataTypes.DATE,
+            defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
           },
-        updatedAt: {
-            field: 'updated_at',
-            type: DataTypes.DATE,
-        },
         actived: {
             type: DataTypes.BOOLEAN,
             allowNull: false
@@ -35,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
 
     let config = {
         tableName: "users_base",
-        timestamp: true
+        timestamp: true,
+        updatedAt: false,
     };
 
     
@@ -50,7 +48,9 @@ module.exports = (sequelize, DataTypes) => {
             through: "user_security",
             foreignKey: "id_user",
             otherKey: "id_group",
-            timestamps: false
+            timestamps: false,
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE"
         });
     }
     
@@ -61,9 +61,20 @@ module.exports = (sequelize, DataTypes) => {
             through: "user_security",
             foreignKey: "id_access",
             otherKey: "id_user",
-            timestamp: false
+            timestamp: false,
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE"
         })
     };
+
+    User.associate = (models) => {
+        User.hasMany(models.UserSecurity, {
+            as: "user",
+            foreignKey: "id_user",
+            timestamp: false,
+       });
+       }
+       
 
     return User;
 }

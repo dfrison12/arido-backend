@@ -8,9 +8,9 @@ const router = express.Router();
 const usersApiController = require ('../../controllers/api/users');
 
 /* creating a route that will be used to send a response to the client. */
-router.get("/users/:alias",usersApiController.show);
 router.get("/users", usersApiController.list);
-
+router.get("/users/:alias", usersApiController.show);
+router.post("/users", usersApiController.store)
 
 /* Exporting the router object so that it can be used in other files. */
 module.exports = router;

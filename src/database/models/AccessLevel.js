@@ -30,9 +30,21 @@ module.exports = (sequelize, DataTypes) => {
             as: "users",
             through: "user_security",
             foreignKey: "id_user",
-            otherKey: "id_access"
+            otherKey: "id_access",
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE"
         })
     };
+    AccessLevel.associate = (models) => {
+        AccessLevel.hasMany(models.UserSecurity, {
+            as: "access",
+            foreignKey: "id_access",
+            timestamp: false
+       });
+       }
+    
+
+    
 
     return AccessLevel;
 }
