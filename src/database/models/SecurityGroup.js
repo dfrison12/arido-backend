@@ -22,7 +22,9 @@ module.exports = (sequelize, DataTypes) => {
 
     let config = {
         tableName: "security_groups",
-        timestamp: false
+        timestamp: false,
+        createdAt: false,
+        updatedAt: false,
     };
 
     /* Creating a new table in the database. */
