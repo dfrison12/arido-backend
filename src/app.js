@@ -2,17 +2,17 @@
 const express = require('express');
 
 /* Importing routers */
-const userRouter = require('./routes/api/users');
+const userApiRouter = require('./routes/api/users');
 
 /* Creating an instance of the express package. */
 const app = express();
 
-/* Telling the server to use the mainRouter when the user goes to the root directory. */
-app.use("/", userRouter);
-
 /* Configuring global middlewares */
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+
+/* Telling the server to use the mainRouter when the user goes to the root directory. */
+app.use("/api", userApiRouter);
 
 /* This is the port that the server is running on. */
 const port = 3001;
