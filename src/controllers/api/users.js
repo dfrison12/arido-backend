@@ -1,7 +1,5 @@
-/* Importing the database models and the Op object. */
 const db = require ("../../database/models");
 const Op = db.Sequelize.Op;
-
 const bcryptjs = require("bcryptjs");
 
 /* Creating a variable called User that is equal to the User model. */
@@ -27,7 +25,6 @@ class Response extends Meta {
     }
 }
 
-/* Exporting the functions to be used in the routes. */
 module.exports = {
     /* Service to retrieve the information of registered users. */
     list: async (req,res) => {
