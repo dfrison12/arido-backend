@@ -29,7 +29,13 @@ module.exports = {
     /* Service to retrieve the information of registered users. */
     list: async (req,res) => {
         try {
-            let users = await User.findAll()
+            let data = await User.findAll()
+            const users = data.map( user => ({
+                id: user.id,
+                alias: user.alias,
+                actived: user.actived,
+        
+            }));
             let response = new Response(
                 200,
                 "Success! users found!",
@@ -99,22 +105,41 @@ module.exports = {
                 }
             });
 
+            let userAccess = await UserSecurity.findAll({
+                where: {
+                    id_user: user.id
+                }
+            });
+
             /* Mapping the dataValues of the userGroups array and pushing the id_group to the
             mappedUserGroup array. */
-            let mappedGroups = userGroups.map(group => {
+            let mappedGroups = userGroups.map( group => {
                 return group.dataValues
             });
             let mappedUserGroup = [];
-            mappedGroups.map(group =>{
+            mappedGroups.map( group =>{
                 mappedUserGroup.push(group.id_group)
             });
+
+            let mappedAccess = userAccess.map( access => {
+                return access.dataValues
+            });
+            let mappedUserAccess = [];
+            mappedAccess.map(group =>{
+                mappedUserAccess.push( group.id_group )
+            });
+
+            const dataGroup = {
+                group: mappedUserGroup,
+                access: mappedUserAccess
+            };
 
             let response = new Response(
                 200,
                 "Success! groups found!",
                 "api/users/:alias/groups",
                 mappedUserGroup.length,
-                mappedUserGroup,
+                dataGroup,
             )
 
             /* Checking if the mappedUserGroup is null and if it is, it returns an error. If it is not
