@@ -29,10 +29,12 @@ module.exports = {
     /* Service to retrieve the information of registered users. */
     list: async (req,res) => {
         try {
+            
             let data = await User.findAll()
             const users = data.map( user => ({
                 id: user.id,
                 alias: user.alias,
+                createdAt: user.createdAt,
                 actived: user.actived,
         
             }));
@@ -46,6 +48,7 @@ module.exports = {
             return res.status(200).json(response)
         }
         catch {
+            
             let response = new Response(
                 404,
                 `Error! Couldn't find users on database!`
