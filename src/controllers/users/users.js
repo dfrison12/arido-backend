@@ -2,13 +2,10 @@ const db = require ("../../database/models");
 const Op = db.Sequelize.Op;
 const bcryptjs = require("bcryptjs");
 
-/* Creating a variable called User that is equal to the User model. */
 const User = db.User;
-const AccessLevel = db.AccessLevel;
-const SecurityGroup = db.SecurityGroup;
 const UserSecurity = db.UserSecurity;
 
-/* The Response class extends the Meta class and adds a data property to it. */
+// structure for endpoints
 class Meta {
     constructor( status, message,url, length) {
         this.status = status;
@@ -27,7 +24,7 @@ class Response extends Meta {
 
 module.exports = {
     /* Service to retrieve the information of registered users. */
-    list: async (req,res) => {
+    getUsers: async (req,res) => {
         try {
             
             let data = await User.findAll()
@@ -59,7 +56,7 @@ module.exports = {
     /* Service to retrieve the information of a registered user with an alias*/
     showUser: async (req,res) => {
         try {
-            let user = await User.findOne(
+            let user = await User.findAll(
                 {
                     where: {
                         alias: {[Op.like]: '%' + req.params.alias + '%'}
@@ -74,8 +71,6 @@ module.exports = {
                 user
             )
 
-            /* Checking if the user is null and if it is, it returns an error. If it is not null, it
-            returns the response. */
             if(user == null) {
                 return error;
             }else {
@@ -90,11 +85,10 @@ module.exports = {
             return res.status(404).json(response);
         }
     },
-    /* Service to retrieve security groups given an alias. */
+    /* Service to retrieve the information of user security groups*/
     showGroups: async (req,res) => {
         try {
-            /* Finding the user with the alias that is passed in the url and then finding all the
-            groups that the user is associated with. */
+            
             let user = await User.findOne(
                 {
                     where: {
@@ -114,8 +108,6 @@ module.exports = {
                 }
             });
 
-            /* Mapping the dataValues of the userGroups array and pushing the id_group to the
-            mappedUserGroup array. */
             let mappedGroups = userGroups.map( group => {
                 return group.dataValues
             });
@@ -145,8 +137,6 @@ module.exports = {
                 dataGroup,
             )
 
-            /* Checking if the mappedUserGroup is null and if it is, it returns an error. If it is not
-            null, it returns the response. */
             if(mappedUserGroup == null) {
                 return error
             }else {
@@ -163,28 +153,22 @@ module.exports = {
     },
     /* Service to register users */
     store: async (req, res) => {
-        
         try {
-            /* Creating a new user. */
+        
             let userToStore = await User.create({
-                ...req.body,
-                pass: (req.body.pass, 10)
+                alias: req.body.alias,
+                pass: bcryptjs.hashSync(req.body.pass, 10),
+                actived: true
             });
-            let userAssociations = await UserSecurity.create({
-                id_user: userToStore.id,
-                id_group: req.body.group,
-                id_access: req.body.access,
-            });
-
-            /* Creating a new response object and returning it. */
+     
             let response = new Response(
-                201,
+                200,
                 "Success! user created!",
                 userToStore.length,
                 "api/users",
                 userToStore
             );
-            return res.status(201).json(response);     
+            return res.status(200).json(response);     
         }
         catch {
             let response = new Response(
