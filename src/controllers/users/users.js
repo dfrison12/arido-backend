@@ -45,7 +45,7 @@ module.exports = {
             return res.status(200).json(response)
         }
         catch {
-            
+            console.log(e)
             let response = new Response(
                 404,
                 `Error! Couldn't find users on database!`
